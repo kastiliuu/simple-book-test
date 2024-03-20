@@ -6,10 +6,13 @@ describe('API test Simple Book', () => {
   let name;
   let token;
   let orderID;
+  let IDorder;
+  let patchName;
 
   before(() => {
     name = faker.person.fullName();
     email = faker.internet.email();
+    patchName = faker.person.lastName();
   });
 
   it('Returns the status of the API.', () => {
@@ -86,6 +89,72 @@ describe('API test Simple Book', () => {
       expect(response.body[0]).to.have.property('customerName');
       expect(response.body[0]).to.have.property('createdBy');
       expect(response.body[0]).to.have.property('quantity');
+    });
+  });
+
+  it('Get an order', () => {
+    cy.request({
+      method: 'GET',
+      url: `https://simple-books-api.glitch.me/orders/${orderID}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(response.body).to.have.property('id');
+      expect(response.body).to.have.property('bookId');
+      expect(response.body).to.have.property('customerName');
+      expect(response.body).to.have.property('createdBy');
+      expect(response.body).to.have.property('quantity');
+      IDorder = response.body.id
+      cy.log(`${IDorder}`)
+
+    });
+  });
+
+  it('Update an order', () => {
+    cy.request({
+      method: 'PATCH',
+      url: `https://simple-books-api.glitch.me/orders/${orderID}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body:{
+        customerName: patchName
+      },
+    }).then((response) => {
+      expect(response.status).to.eq(204);
+    });
+    cy.request({
+      method: 'GET',
+      url: `https://simple-books-api.glitch.me/orders/${orderID}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    }).then((response) => {
+      expect(response.body.customerName).to.eq(patchName);
+    });
+  });
+
+  it('Delete an order', () => {
+    cy.request({
+      method: 'DELETE',
+      url: `https://simple-books-api.glitch.me/orders/${orderID}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    }).then((response) => {
+      expect(response.status).to.eq(204);
+    });
+    cy.request({
+      method: 'GET',
+      url: `https://simple-books-api.glitch.me/orders/${orderID}`,
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      failOnStatusCode: false
+    }).then((response) => {
+      expect(response.status).to.eq(404);
     });
   });
 
