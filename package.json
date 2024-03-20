@@ -1,0 +1,38 @@
+{
+    "name": "cypressmedium",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "cypress:run": "cypress run ",
+      "postcypress:run": "node ./cypress/support/cucumber-html-reporter.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+      "@faker-js/faker": "^8.4.1",
+      "cucumber-html-reporter": "^5.2.0",
+      "cypress": "^4.6.0",
+      "cypress-cucumber-preprocessor": "^4.0.0"
+    },
+
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": true,
+    "stepDefinitions": "cypress/integration/",
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "cypress/cucumber-json",
+      "filePrefix": "",
+      "fileSuffix": ".json"
+    },
+
+    "scripts": {
+      "test": "echo \"Error: no test specified\" && exit 1",
+      "cypress:run": "cypress run",
+      "postcypress:run": "node ./cypress/support/cucumber-html-reporter.js"
+ }
+  
+}
+}
